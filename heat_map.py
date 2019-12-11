@@ -1,6 +1,7 @@
 import numpy as np 
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 import sys
 import json
 import csv
@@ -63,6 +64,12 @@ def heat_map_adapter(df, year, MRL):
     gmap.heatmap(lats, longs)
     return gmap
 
+def heatmap_namer():
+    name = "heatmaps/"
+    for contam in sys.argv[1:]: name += contam + "_"
+    name += "heatmap.html"
+    return name
+
 
 
 def config():
@@ -92,7 +99,9 @@ def main():
     )
 
     gmap = heat_map_adapter(df, configs["year"], configs["MRL"])
-    gmap.draw("%s_heatmap.html" % sys.argv[1])
+    heatmap_name = heatmap_namer()
+    if not os.path.exists("heatmaps"): os.mkdir("heatmaps")
+    gmap.draw(heatmap_name)
 
 if __name__ == "__main__":
     main()
